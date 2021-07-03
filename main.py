@@ -11,6 +11,8 @@ from kivy.uix.togglebutton import ToggleButton
 
 import networkx as nx
 
+import matplotlib.pyplot as plt
+
 class Nodets(App):
     def build(self):
         self.connecting_node = ""
@@ -28,11 +30,11 @@ class Nodets(App):
         controls.add_widget(edge_select)
         controls.add_widget(add_node_button)
 
-        notes = Image()
+        self.notes = Image()
         self.G = nx.Graph()
 
         main_layout.add_widget(controls)
-        main_layout.add_widget(notes)
+        main_layout.add_widget(self.notes)
 
         return main_layout
 
@@ -43,6 +45,8 @@ class Nodets(App):
         else:
             self.G.add_edge(text, self.connecting_node)
         self.node_textbox.text = ""
+        self.render_graph()
+        self.show_graph()
         print(text)
 
     def show_popup(self, instance):
@@ -68,6 +72,14 @@ class Nodets(App):
 
     def set_connect(self, instance):
         self.connecting_node = instance.text
+
+    def render_graph(self):
+        plt.clf()
+        nx.draw(self.G)
+        plt.savefig('graph.png')
+
+    def show_graph(self):
+        self.notes.source = 'graph.png'
 
 if __name__ == "__main__":
     Nodets().run()
