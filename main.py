@@ -27,9 +27,12 @@ class Nodets(App):
         edge_select.bind(on_press=self.show_popup)
         add_node_button = Button(text="Add Node")
         add_node_button.bind(on_press=self.add_node)
+        save_notes_button = Button(text="Save notes")
+        save_notes_button.bind(on_press=self.save_graph)
         controls.add_widget(self.node_textbox)
         controls.add_widget(edge_select)
         controls.add_widget(add_node_button)
+        controls.add_widget(save_notes_button)
 
         self.notes = Image()
         self.G = nx.Graph()
@@ -79,8 +82,12 @@ class Nodets(App):
 
     def render_graph(self):
         plt.clf()
-        nx.draw_networkx(self.G, label=self.G.nodes)
+        plt.figure(figsize=(8.5,11))
+        nx.draw_networkx(self.G, label=self.G.nodes, node_size=8000)
         plt.savefig('graph.png')
+
+    def save_graph(self, instance):
+        plt.savefig('graph.pdf')
 
     def show_graph(self):
         self.notes.source = 'graph.png'
