@@ -1,5 +1,6 @@
 import kivy
 from kivy.app import App
+from kivy.cache import Cache
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scrollview import ScrollView
@@ -40,13 +41,16 @@ class Nodets(App):
 
     def add_node(self, instance):
         text = self.node_textbox.text
-        if self.connecting_node == "":
+        if text == "":
+            pass
+        elif self.connecting_node == "":
             self.G.add_node(text)
         else:
             self.G.add_edge(text, self.connecting_node)
         self.node_textbox.text = ""
         self.render_graph()
         self.show_graph()
+        print(self.G.nodes)
         print(text)
 
     def show_popup(self, instance):
@@ -75,11 +79,12 @@ class Nodets(App):
 
     def render_graph(self):
         plt.clf()
-        nx.draw(self.G)
+        nx.draw_networkx(self.G, label=self.G.nodes)
         plt.savefig('graph.png')
 
     def show_graph(self):
         self.notes.source = 'graph.png'
+        self.notes.reload()
 
 if __name__ == "__main__":
     Nodets().run()
